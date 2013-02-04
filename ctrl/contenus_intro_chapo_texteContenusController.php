@@ -55,7 +55,7 @@ class contenus_intro_chapo_texteContenusController extends contenus_intro_chapo_
                 $contenus = $this->getModel('contenus');
                 // ajoute le contenu s'il n'existe pas deja
                 $request = $this->getRequest();
-                $lang = $request->LANG;
+                $lang = $request['LANG'];
                 if (!$id) {
                     $id = $contenus->addContenu($nom, $type_content, $id_zone, $id_page, $lang);
                 }

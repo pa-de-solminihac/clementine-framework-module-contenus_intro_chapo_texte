@@ -4,7 +4,7 @@
         {
             language: 'fr',
             contentsCss: ['<?php echo __WWW_ROOT_SITE__; ?>/skin/css/style.css', '<?php echo __WWW_ROOT_SITE__; ?>/skin/css/style_surcharges.css'],
-            contentsLanguage: '<?php echo $request->LANG; ?>',
+            contentsLanguage: '<?php echo $request['LANG']; ?>',
             scayt_autoStartup: false
         }
     ); 
