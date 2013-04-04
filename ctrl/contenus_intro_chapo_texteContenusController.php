@@ -17,7 +17,7 @@ class contenus_intro_chapo_texteContenusController extends contenus_intro_chapo_
      * @access public
      * @return void
      */
-    function editcontenuAction ($request)
+    function editcontenuAction ($request, $params = null)
     {
         // recupere le contenu du script a injecter dans le footer
         $script = $this->getBlockHtml('contenus/jquery_intro_chapo_texte_replace');
@@ -32,26 +32,26 @@ class contenus_intro_chapo_texteContenusController extends contenus_intro_chapo_
         // javascript de configuration de ckeditor
         $this->getModel('cssjs')->register_foot('jquery.ckeditor.replace', $script);
         // execute le controleur normal
-        return parent::editcontenuAction($request);
+        return parent::editcontenuAction($request, $params);
     }
 
     /**
     * Function : valid_clementine_cms_contenu_html_intro_chapo_texteAction() 
     * 
     */
-    function valid_clementine_cms_contenu_html_intro_chapo_texteAction($request) 
+    function valid_clementine_cms_contenu_html_intro_chapo_texteAction($request, $params = null) 
     {
+        $ns = $this->getModel('fonctions');
         if ($this->getModel('users')->needPrivilege('manage_contents')) {
-            $ns = $this->getModel('fonctions');
-            if (!empty($_POST)) {
+            if (!empty($request->POST)) {
                 $type_content  = 'clementine_cms_contenu_html_intro_chapo_texte';
-                $id            = $ns->ifPost('int', 'id');
-                $id_zone       = $ns->ifPost('int', 'id_zone');
-                $id_page       = $ns->ifPost('int', 'id_page');
-                $nom           = $ns->ifPost('html', 'nom');
-                $contenu_html = $ns->ifPost('html', 'contenu_html');
-                $contenu_html_chapo = $ns->ifPost('html', 'contenu_html_chapo');
-                $contenu_html_intro_chapo_texte = $ns->ifPost('html', 'contenu_html_intro_chapo_texte');
+                $id            = $request->post('int', 'id');
+                $id_zone       = $request->post('int', 'id_zone');
+                $id_page       = $request->post('int', 'id_page');
+                $nom           = $request->post('html', 'nom');
+                $contenu_html = $request->post('html', 'contenu_html');
+                $contenu_html_chapo = $request->post('html', 'contenu_html_chapo');
+                $contenu_html_intro_chapo_texte = $request->post('html', 'contenu_html_intro_chapo_texte');
                 $contenus = $this->getModel('contenus');
                 // ajoute le contenu s'il n'existe pas deja
                 $request = $this->getRequest();
@@ -59,7 +59,7 @@ class contenus_intro_chapo_texteContenusController extends contenus_intro_chapo_
                 if (!$id) {
                     $id = $contenus->addContenu($nom, $type_content, $id_zone, $id_page, $lang);
                 }
-                if ($this->set_contenu_defaut($id)) {
+                if ($this->set_contenu_defaut($request, $id)) {
                     $contenus->updateContenuIntroChapoTexte($id, $contenu_html, $contenu_html_chapo, $contenu_html_intro_chapo_texte, $lang);
                 }
             }
@@ -69,7 +69,7 @@ class contenus_intro_chapo_texteContenusController extends contenus_intro_chapo_
                 $ns->redirect(__WWW__ . '/cms');
             }
         } else {
-            $this->getModel('fonctions')->redirect(__WWW__);
+            $ns->redirect(__WWW__);
         }
     }
 }
